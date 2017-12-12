@@ -30,13 +30,13 @@ fortificationRecord::fortificationRecord() {
     
     // Put blanks in for all 100 records
     for (int i = 0; i<100; i++) {
-        fortificationFile << "                    " << endl;
-        fortificationFile << "          " << endl;
-        fortificationFile << "          " << endl;
-        fortificationFile << "     " << endl;
-        fortificationFile << "                    " << endl;
-        fortificationFile << "                              " << endl;
-        fortificationFile << "                              " << endl;
+        fortificationFile << "                    " << endl;  // wine spirit add
+        fortificationFile << "          " << endl; //sugar content
+        fortificationFile << "          " << endl; //alcohol content
+        fortificationFile << "     " << endl; //pH
+        fortificationFile << "                    " << endl; // Date
+        fortificationFile << "                              " << endl; //Recorder name
+        fortificationFile << "                              " << endl; //Notes
     }
 }
 

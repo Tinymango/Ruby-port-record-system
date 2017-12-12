@@ -23,8 +23,8 @@ void sorting() {
 
 void crushing() {
     cout << "Crushing/destemming is not a critical quality point. \n"
-    << "Typically, conventional roller crushers are used, and most wineries remove some of stlaks from grapes. \n"
     << "Stalks can add undesirable harsh and bitter characters to the wine. \n"
+    << "Typically, conventional roller crushers are used, and most wineries remove some of stalks from grapes. \n"
     << "After crushing, SO2 is added to the must. pH should be less than 3.6. If pH is greater than 3.6, tartaric acid should be added. ";
 }
 
@@ -72,7 +72,7 @@ harvestRecord aharvestRecord;
 // int id, string &supplier_name, string &grape_variety, string &quantity,
 void harvestAdd() {
     int recordNum;
-    string supplier_name, grape_variety, quantity;
+    string supplier_name, grape_variety, quantity, harvestSugar, ripeness, harvestDate, harvestName, harvestNote;
     cout << "Please following the instruction to write all the record into the system. " << endl;
     cout << "Enter record number (0-99)" << endl;
     cin >> recordNum;
@@ -84,8 +84,19 @@ void harvestAdd() {
     getline(cin, grape_variety);
     cout << "Enter grape quantity";
     getline(cin, quantity);
+	cout << "Enter sugar content of the grapes";
+	getline(cin, harvestSugar);
+	cout << "Describe the ripeness of the grapes, such as pH, dissolved solids, color, sensory analysis";
+	getline(cin, ripeness);
+	cout << "Enter the time and date of the recording";
+	getline(cin, harvestDate);
+	cout << "Enter the name of the recorder";
+	getline(cin, harvestName);
+	cout << "Enter any notes you want to record";
+	getline(cin, harvestNote);
+
     
-    if (aharvestRecord.harvestAddRec(recordNum, supplier_name, grape_variety, quantity)) {
+    if (aharvestRecord.harvestAddRec(recordNum, supplier_name, grape_variety, quantity,harvestSugar, ripeness, harvestDate,harvestName,harvestNote)) {
         cout << "Record is added successfully " << endl;
     }
     else {
@@ -95,7 +106,7 @@ void harvestAdd() {
 
 void harvestUpdate() {
     int recordNum;
-    string supplier_name, grape_variety, quantity;
+	string supplier_name, grape_variety, quantity, harvestSugar, ripeness, harvestDate, harvestName, harvestNote;
     
     // Ask the user for the record number to update
     cout << "Enter the record number to update(0-99): ";
@@ -103,7 +114,7 @@ void harvestUpdate() {
     cin.ignore();
     
     // Make sure it exists
-    if (!aharvestRecord.harvestGetRec(recordNum, supplier_name, grape_variety, quantity)) {
+    if (!aharvestRecord.harvestGetRec(recordNum, supplier_name, grape_variety, quantity, harvestSugar, ripeness, harvestDate, harvestName, harvestNote)) {
         cout << "ERROR:  there is no such record" << endl;
         return;
     }
@@ -130,7 +141,7 @@ void harvestUpdate() {
     getline(cin, quantity);
     
     // Add new record to inventory
-    if (aharvestRecord.harvestAddRec(recordNum, supplier_name, grape_variety, quantity)) {
+    if (aharvestRecord.harvestAddRec(recordNum, supplier_name, grape_variety, quantity, harvestSugar, ripeness, harvestDate, harvestName, harvestNote)) {
         cout << "Record added successfully " << endl;
     }
     else {
@@ -140,7 +151,7 @@ void harvestUpdate() {
 
 void harvestDelete() {
     int recordNum;
-    string supplier_name, grape_variety, quantity;
+	string supplier_name, grape_variety, quantity, harvestSugar, ripeness, harvestDate, harvestName, harvestNote;
     
     // Ask the user for the record to delete
     cout << "Enter the record number to delete(0-99): ";
@@ -148,7 +159,7 @@ void harvestDelete() {
     cin.ignore();
     
     // Does it exist?
-    if (!aharvestRecord.harvestGetRec(recordNum, supplier_name, grape_variety, quantity)) {
+    if (!aharvestRecord.harvestGetRec(recordNum, supplier_name, grape_variety, quantity, harvestSugar, ripeness, harvestDate, harvestName, harvestNote)) {
         cout << "ERROR:  no such record" << endl;
         return;
     }
@@ -165,7 +176,7 @@ void harvestDelete() {
         supplier_name="";
         grape_variety="";
         quantity="";
-        if (aharvestRecord.harvestAddRec(recordNum, supplier_name, grape_variety, quantity)) {
+        if (aharvestRecord.harvestAddRec(recordNum, supplier_name, grape_variety, quantity, harvestSugar, ripeness, harvestDate, harvestName, harvestNote)) {
             cout << "Record deleted" << endl;
         }
         else {
@@ -178,10 +189,10 @@ void harvestDelete() {
 }
 
 void harvestList() {
-    string supplier_name, grape_variety, quantity;
+	string supplier_name, grape_variety, quantity, harvestSugar, ripeness, harvestDate, harvestName, harvestNote;
     
     for (int i = 0; i<100; i++) {
-        if (aharvestRecord.harvestGetRec(i, supplier_name, grape_variety, quantity)) {
+        if (aharvestRecord.harvestGetRec(i, supplier_name, grape_variety, quantity, harvestSugar, ripeness, harvestDate, harvestName, harvestNote)) {
             cout << ((i < 10) ? " " : "") << i << ": " << supplier_name << grape_variety << " " << quantity << endl;
         }
     }
@@ -189,7 +200,8 @@ void harvestList() {
 
 void harvestRecordKeeping() {
     char harvestInput=0;
-    
+	int i;
+	for (i = 0; i < 5; i++) { cout << "\n" << endl; }
         cout << "Ruby port style wine HACCP record system -- Harvesting \n"
         << "===================================================================================" << endl;
         cout << "Harvesting is a critical quality point (CQP).\n"
@@ -206,7 +218,7 @@ void harvestRecordKeeping() {
         cout << "\n=========================================================\n";
         cout << "\nMonitoring: \n"<<endl;
         cout <<setw(20)<<"What " << setw(20) << "How" << setw(15) << "Frequency" <<endl;
-        cout <<setw(20)<< "Sugar Content " << setw(20) << "Currently unknown" << setw(15) << "Once a day"<<endl;
+        cout <<setw(20)<< "Sugar Content " << setw(20) << "Hydrometer" << setw(15) << "Once a day"<<endl;
         cout <<setw(20)<< "Ripeness " << setw(20) << "Visual Inspection" << setw(15) << "Once a day"<<endl;
         //<< setw(50) << "Dissolved solids\n"
         //<< setw(50) << "Sensory analysis for flavor\n";
@@ -490,6 +502,7 @@ float spiritCalculate() {
     cin >> desireAlc;
     
     float calcWine = (volWine*(desireAlc - alcoholContW)) / (alcoholContF - desireAlc);
+	cout << "The wine spirit you should add to achieve " << desireAlc << " alcohol content is " << calcWine << " gallons." << endl;
     return calcWine;
 }
 
@@ -650,9 +663,9 @@ void fortificationRecordKeeping() {
         cout << "\n=========================================================\n";
         cout << "\nMonitoring: "<<endl;
         cout<< setw(20)<< "What " << setw(10) << "How" << setw(45) << "Frequency" <<endl;
-        cout<< setw(20)<< "Alcohol content " << setw(10) << "unknown" << setw(45) << "Once per tank, at the end of pressing"<<endl;
-        cout<< setw(20)<< "Sugar content " << setw(10) << "unknown" << setw(45) << "Once per tank, at the end of pressing"<<endl;
-        cout<< setw(20)<< "pH " << setw(10) << "unknown" << setw(45) << "Once per tank, at the end of pressing"<<endl;
+        cout<< setw(20)<< "Alcohol content " << setw(12) << "Send to ETS" << setw(45) << "Once per tank, at the end of pressing"<<endl;
+        cout<< setw(20)<< "Sugar content " << setw(12) << "Send to ETS" << setw(45) << "Once per tank, at the end of pressing"<<endl;
+        cout<< setw(20)<< "pH " << setw(10) << "Send to ETS" << setw(45) << "Once per tank, at the end of pressing"<<endl;
         cout<< "\nSensory profile and flavor should also be monitored at this stage \n";
         cout << "\n=========================================================\n";
         cout << "\n Corrective actions : \n"
@@ -720,7 +733,7 @@ void HACCP_guide() {
         "Seeting", "Aging", "Fine & filter", "Bottling" };
     
     for (step_no = 1; step_no < 10; step_no++) {
-        cout << "Step: " << step_no << setw(10) << step_content[i] << endl;
+        cout << "Step: " << step_no << setw(3) << " " << step_content[i] << endl;
         cout << setw(15) << "|" << endl;
         cout << setw(15) << "|" << endl;
         cout << setw(15) << "|" << endl;
@@ -746,7 +759,7 @@ void recordKeeping() {
         "Seeting", "Aging", "Fine & filter", "Bottling" };
     
     for (step_no = 1; step_no < 10; step_no++) {
-        cout << setw(10) << "Step: (" << step_no << ")"<< step_content[i] << "\n" << endl;
+        cout << setw(10) << "Step: (" << step_no << ") "<< " " << step_content[i] << "\n" << endl;
         i++;
     }
     cout<<"   (q) Quit from Critical Control Point Recor Keeping System"<<endl;
@@ -805,9 +818,9 @@ void author() {
 
 // mainMenu case 4: acknowledgement
 void acknowledgement() {
-    cout << "\n This program is based on FDSC 4500 Winemaking Theory and Practice I HACCP project. The project is desgiend by Xianjia Zeng, Carolyn Schwarts, Shelby Head. " << endl;
-	cout << "\n This system is for CS 2024 C++ programming final project. " << endl;
-	cout << "\n I would like to thank Professor Dwayne Bershaw and Professor Ron Dinapoli gave us suggestion for our project. \n"
+    cout << "\n This program is based on FDSC 4500 Winemaking Theory and Practice I Critical Qualtiy Point project. The Ruby Port production flow chart is written by Xianjia Zeng, Carolyn Schwarts, Shelby Head. " << endl;
+	cout << "\n This system is designed for CS 2024 C++ programming final project. " << endl;
+	cout << "\n I would like to thank Professor Dwayne Bershaw and Professor Ron Dinapoli for the suggestions of this project and system. \n"
     << "\n I would also thank my partner Jianning Tang, who helped me debug this program. \n"
     << "\n" << "\n" << "\n"
 	<< " Xianjia Zeng " << endl;
