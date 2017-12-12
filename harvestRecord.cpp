@@ -2,8 +2,6 @@
 //  harvestRecord.cpp
 //  final project
 //
-//  Created by Jianing Tang on 12/4/17.
-//  Copyright © 2017 Jianing Tang. All rights reserved.
 //
 #include <iostream>
 #include <fstream>
